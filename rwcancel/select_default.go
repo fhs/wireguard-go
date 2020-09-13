@@ -1,4 +1,4 @@
-// +build !linux,!windows
+// +build !linux,!plan9,!windows
 
 /* SPDX-License-Identifier: MIT
  *

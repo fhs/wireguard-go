@@ -8,6 +8,7 @@
 package conn
 
 import (
+	"log"
 	"net"
 	"os"
 	"syscall"
@@ -107,13 +108,17 @@ func createBind(uport uint16) (Bind, uint16, error) {
 	if err != nil && extractErrno(err) != syscall.EAFNOSUPPORT {
 		return nil, 0, err
 	}
-
-	bind.ipv6, port, err = listenNet("udp6", port)
-	if err != nil && extractErrno(err) != syscall.EAFNOSUPPORT {
-		bind.ipv4.Close()
-		bind.ipv4 = nil
-		return nil, 0, err
+	if err != nil {
+		log.Printf("listenNet udp4: %v\n", err)
 	}
+	log.Printf("listening on udp4 address %v\n", bind.ipv4.LocalAddr())
+
+	//bind.ipv6, port, err = listenNet("udp6", port)
+	//if err != nil && extractErrno(err) != syscall.EAFNOSUPPORT {
+	//	bind.ipv4.Close()
+	//	bind.ipv4 = nil
+	//	return nil, 0, err
+	//}
 
 	return &bind, uint16(port), nil
 }
